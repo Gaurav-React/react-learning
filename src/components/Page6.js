@@ -6,10 +6,12 @@ import ToggleButton from "react-toggle-button";
 export default function Page6() {
 
   const [toggal, setToggal] = useState(false);
-  const [conty, setListcountry] = useState();
-  const [state, setState] = useState();
+  const [conty, setListcountry] = useState(false);
+  const [addconty, setAddcountry] = useState();
+  const [state, setState] = useState(false);
+  const [addstate, setAddstate] = useState();
   const [city, setCity] = useState();
-  var stateObject = {
+  var datasss = {
     India: {
       Delhi: ["new Delhi", "North Delhi"],
       Kerala: ["Thiruvananthapuram", "Palakkad"],
@@ -24,8 +26,25 @@ export default function Page6() {
       Columbia: ["Washington", ""],
     },
   };
+  const cc = Object.keys(datasss);
+  
+  function countryfun (e){
+    setAddstate('');
+    handleChange1(e);
+    setListcountry(true)
+    //console.log(e.target.value);
+    const ss = Object.keys(datasss[e.target.value]);
+    setAddcountry(ss);
+    //console.log(sc);
+  }
 
-
+  function statefun(e){
+    handleChange1(e);
+    setState(true)
+    const sc = datasss[portalinfo.country][e.target.value];
+    //console.log(sc);
+    setAddstate(sc)
+  }
   const navigate = useNavigate();
   const [data, setData] = useState({
     firstname: "",
@@ -57,13 +76,13 @@ export default function Page6() {
   // const countySel = portalinfo.country;
   // const stateSel = portalinfo.state;
   // const districtSel = portalinfo.city;
-  const gg =[];
-  for (var country in stateObject) {
-    const listcountry = gg.push(country);
-  }
-  console.log(gg);
-  
-  
+  // const gg =[];
+  // for (var country in stateObject) {
+  //   const listcountry = gg.push(country);
+  // }
+  // console.log(gg);
+
+
   function handleChange1(evt) {
     //const value1 = evt.target.value;
     const value1 =
@@ -75,17 +94,17 @@ export default function Page6() {
   }
 
   function DataSubmit() {
-    const JsonData = { basicinfo: data, postaladdress: portalinfo, toggaldata:toggal };
+    const JsonData = { basicinfo: data, postaladdress: portalinfo, toggaldata: toggal };
     //const JsonData1 = {'postaladdress' : portalinfo };
     const obj = JSON.stringify(JsonData);
     navigate("/fetchdata", { state: obj });
     //console.log(obj);
   }
 
-  function DataToggal(value){
+  function DataToggal(value) {
     const vv = !toggal
-   // console.log(value);
-    if(value != vv){
+    // console.log(value);
+    if (value != vv) {
       setToggal(vv);
     }
     //console.log(vv);
@@ -95,7 +114,7 @@ export default function Page6() {
   }
   return (
     <>
-    {/* {{listItems}} */}
+      {/* {{listItems}} */}
       <Container>
         <Row>
           <div className="card">
@@ -200,17 +219,13 @@ export default function Page6() {
                         name="country"
                         id="country"
                         value={data.country}
-                        onChange={handleChange1}
+                        onChange={countryfun}
                       >
-                        <option value="">Select Country</option>
-                        {
-                        gg.map((v,i) =>
-                           <option key={i} value={v}>{v}</option>
-                        )
-                        }
-                        {/* {{listItems}} */}
-                        {/* <option value="india">India</option>
-                        <option value="usa">USA</option> */}
+                        <option>Select Country</option>
+                        {cc.map((v, i) => (
+                          <option key={i} value={v}>{v}</option>
+                        ))}
+
                       </select>
                     </div>
                   </Col>
@@ -223,11 +238,16 @@ export default function Page6() {
                         name="state"
                         id="state"
                         value={data.state}
-                        onChange={handleChange1}
+                        // onChange={handleChange1}
+                        onChange={statefun}
                       >
-                        <option value="">Select State</option>
-                        <option value="Punjab">Punjab</option>
-                        <option value="Haryana">Haryana</option>
+                        <option>Select State</option>
+                        {
+                          conty ?
+                          addconty.map((v, i) => (
+                            <option key={i} value={v}>{v}</option>
+                          )) : ''
+                        }
                       </select>
                     </div>
                   </Col>
@@ -242,13 +262,14 @@ export default function Page6() {
                         value={data.city}
                         onChange={handleChange1}
                       >
-                        <option value="">Select City</option>
-                        <option value="Ambala">Ambala</option>
-                        <option value="Asandh">Asandh</option>
-                        <option value="Ateli Mandi">Ateli Mandi</option>
-                        <option value="Bahadurgarh">Bahadurgarh</option>
-                        <option value="Bara Uchana">Bara Uchana</option>
-                        <option value="Barwala">Barwala</option>
+                        <option value="">Select City</option>  
+                        {
+                          state && addstate.length > 1 ?
+                          addstate.map((v, i) => (
+                            <option key={i} value={v}>{v}</option>
+                          )) : ''
+                        }                        
+
                       </select>
                     </div>
                   </Col>
@@ -273,17 +294,17 @@ export default function Page6() {
                         type="checkbox"
                         name="check_address"
                         onChange={handleChange1}
-                        
+
                       />
                     </div>
                   </Col>
                   <Col md={12}>
-                  <div className="form-group mt-3">
-                    <ToggleButton 
-                      name="toggalbutton"
-                      value={toggal}
-                      onToggle={DataToggal}
-                    />
+                    <div className="form-group mt-3">
+                      <ToggleButton
+                        name="toggalbutton"
+                        value={toggal}
+                        onToggle={DataToggal}
+                      />
                     </div>
                   </Col>
                 </Row>
