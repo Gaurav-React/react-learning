@@ -1,69 +1,53 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import axios from "axios";
 import { Container, Row, Col } from "react-bootstrap";
-import { useNavigate, useParams, Link } from "react-router-dom";
-export default function EditUser() {
+import { useNavigate, Link} from "react-router-dom";
 
-  const [userdata, setSaveData] = useState({
-    name: "",
-    email: "",
-    phone: "",
-    suite: "",
-    city: "",
-    street: "",
-    zipcode: ""
-  });   
 
-  const { name, email, phone, suite, city, street, zipcode } = userdata;
-  //const { suite, city, street, zipcode } = SaveAddress;
+export default function Adduser() {
 
-  let navigate = useNavigate();
-  let { id } = useParams();
+    const [adddata, setAddData] = useState({
+        name: "",
+        email: "",
+        phone: "",
+        suite: "",
+        city: "",
+        street: "",
+        zipcode: ""
 
-  useEffect(() => {
-    axios
-      .get(`http://localhost:3000/users/${id}`)
-      .then((res) => {
-        //console.log(res.data);
-        let key = { ...res.data};
-        delete key.address
-        let key1 = {...res.data.address};
-        setSaveData({name:key.name,email:key.email,phone:key.phone,suite:key1.suite,city:key1.city,street:key1.street,zipcode:key1.zipcode})
-
-      })
-      .catch((err) => {
-        console.log(err);
       });
-  }, []);
-
-  
-  function handleChange(evt) {
-    const value = evt.target.value;
-    setSaveData({
-        ...userdata,
-        [evt.target.name]: value,
-      });
-  }
-
-  const onSubmit = async e => {
-    e.preventDefault();
-    const data = {name:userdata.name,email:userdata.email,phone:userdata.phone,"address":{suite:userdata.suite,city:userdata.city,street:userdata.street,zipcode:userdata.zipcode}}
-    axios.put(`http://localhost:3000/users/${id}`, data)
-    navigate('/');
-  };
+      const { name, email, phone, suite, city, street, zipcode } = adddata;
+      let navigate = useNavigate();
+    
+      function handleChange(evt) {
+        const value  = evt.target.value;
+        //console.log(value);
+        setAddData({
+            ...adddata,
+            [evt.target.name]: value,
+          });
+      }
+    
+      const onSubmit = async e => {
+        e.preventDefault();
+        //console.log(adddata.name+'--'+adddata.email);
+        const data = {name:adddata.name,email:adddata.email,phone:adddata.phone,"address":{suite:adddata.suite,city:adddata.city,street:adddata.street,zipcode:adddata.zipcode}}
+        //console.log(data);
+        axios.post(`http://localhost:3000/users/`, data)
+        navigate('/');
+      };  
 
   return (
     <>
       <Container>
-        {/* <div>{JSON.stringify(SaveAdd)}</div> */}
         <div className="card mt-3">
           <div className="card-body">
             <Row>
               <Col md={6}>
-                <Link className="btn btn-primary" to="/">Back To Home</Link>
+              <Link className="btn btn-primary" to="/">Back To Back</Link>
               </Col>
               <Col md={12}>
-                <form onSubmit={e => onSubmit(e)}>
+                <form onSubmit={(e) => onSubmit(e)}>
                   <Row>
                     <Col md={6} className="mt-3">
                       <div className="form-group">
@@ -155,12 +139,7 @@ export default function EditUser() {
                   <Row>
                     <Col md={6}>
                       <div className="form-group">
-                        <button
-                          
-                          className="btn btn-primary mt-3"
-                        >
-                          Submit
-                        </button>
+                        <button className="btn btn-primary mt-3">Submit</button>
                       </div>
                     </Col>
                   </Row>

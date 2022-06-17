@@ -4,7 +4,8 @@ import React from 'react';
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Allusers from './components/Allusers';
 import EditUser from "./components/EditUser";
-
+import Adduser from "./components/Adduser";
+import DeleteUser from "./components/DeleteUser";
 function App() {
   //let { id } = useParams();
   return (
@@ -13,6 +14,8 @@ function App() {
             <Routes>
               <Route path="/" element={<Allusers />}></Route>
               <Route path="/edituser/:id" element={<EditUser />}></Route>
+              <Route path="/adduser/" element={<Adduser />}></Route>
+              <Route path="/delete/:id" element={<DeleteUser />}></Route>
             </Routes>
           </BrowserRouter>
 
